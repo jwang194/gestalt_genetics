@@ -119,13 +119,22 @@ np.savetxt('../gwas/data/phens/colnames.txt',df.columns,'%s')
 phq = df[['FID','IID'] + [s+'_quant' for s in likert.keys()]]
 phq -= 1
 phq['PHQ9_Score'] = phq[phq.columns[2:]].sum(1)
+phq['PHQ9_Score'].loc[pd.isna(phq[phq.columns[:-1]]).sum(1) != 0] = np.nan
 phq['Mild_Exact'] = ((phq.PHQ9_Score > 5) & (phq.PHQ9_Score < 10)).astype('Int64')+1
+phq['Mild_Exact'].loc[pd.isna(phq.PHQ9_Score)] = np.nan
 phq['Moderate_Exact'] = ((phq.PHQ9_Score > 10) & (phq.PHQ9_Score < 15)).astype('Int64')+1
+phq['Moderate_Exact'].loc[pd.isna(phq.PHQ9_Score)] = np.nan
 phq['Moderately_Severe_Exact'] = ((phq.PHQ9_Score > 15) & (phq.PHQ9_Score < 20)).astype('Int64')+1
+phq['Moderately_Severe_Exact'].loc[pd.isna(phq.PHQ9_Score)] = np.nan
 phq['Severe'] = (phq.PHQ9_Score > 20).astype('Int64')+1
+phq['Severe'].loc[pd.isna(phq.PHQ9_Score)] = np.nan
 phq['Mild_Bound'] = (phq.PHQ9_Score > 5).astype('Int64')+1
+phq['Mild_Bound'].loc[pd.isna(phq.PHQ9_Score)] = np.nan
 phq['Moderate_Bound'] = (phq.PHQ9_Score > 10).astype('Int64')+1
+phq['Moderate_Bound'].loc[pd.isna(phq.PHQ9_Score)] = np.nan
 phq['Moderately_Severe_Bound'] = (phq.PHQ9_Score > 15).astype('Int64')+1
+phq['Moderately_Severe_Bound'].loc[pd.isna(phq.PHQ9_Score)] = np.nan
 
+phq['FID'] = phq['IID'] = df['IID']
 phq.to_csv('../gwas/data/phens/phq.pheno',sep='\t',index=False,na_rep='NA')
 np.savetxt('../gwas/data/phens/phq_colnames.txt',phq.columns[2:],'%s')
