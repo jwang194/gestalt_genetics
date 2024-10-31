@@ -1,0 +1,2 @@
+qsub pipeline_kai.sh 50000 10000 ../../data/sim/genotypes/N50kM100k/sim1 traits_10_shared_0.2_specific_0.08_uniform_rg_0.05_random_re_-0.3 ../../data/sim/phenos/ ../../data/sim/gwas/
+qsub pipeline_kai.sh 50000 10000 ../../data/sim/genotypes/N50kM100k/sim1 traits_10_shared_0.2_specific_0.08_uniform_rg_0.05_random_re_-0.4 ../../data/sim/phenos/ ../../data/sim/gwas/

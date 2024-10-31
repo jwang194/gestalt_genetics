@@ -1,0 +1,3 @@
+bash pipeline_kai.sh 1000 10000 /u/home/k/kaia/GESTALT/data/sim/genotypes/N1kM10k/sim_N1000_M10000 testing ../../data/sim/phenos/ ../../data/sim/gwas/
+
+python3 evaluate.py /u/home/k/kaia/GESTALT/data/sim/phenos/testing/ /u/home/k/kaia/GESTALT/data/sim/gwas/testing/  /u/home/k/kaia/GESTALT/data/sim/results/testing/ testing 5 0.25 0.15 1000 10000
