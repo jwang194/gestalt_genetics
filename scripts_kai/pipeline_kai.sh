@@ -8,6 +8,7 @@
 #$ -M kakamatsu@g.ucla.edu
 # Notify when
 #$ -m bea
+#$ -l arch="amd-epyc-7642|i-E5-2670v3|intel-gold*"
 
 R=$SGE_TASK_ID
 N=${1}
@@ -35,6 +36,8 @@ python3 generate.py $N $M 'configs/'${C}'_assignments.txt' 'configs/'${C}'_gg.tx
 python3 mgp.py ${P_DIR}${N}'_'${M}'_'${C}'_rep'${R}'_P.txt' ${P_DIR}${N}'_'${M}'_'${C}'_rep'${R}'_PE.txt' ${P_DIR}${N}'_'${M}'_'${C}'_rep'${R}'_MG.txt' ${P_DIR}${N}'_'${M}'_'${C}'_rep'${R}'_SD.txt'
 
 python3 rename.py ${N} ${M} ${C} ${R} ${P_DIR}
+
+source ~/.bashrc
 
 plink2 \
     --bfile $B \

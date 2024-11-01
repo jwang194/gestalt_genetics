@@ -21,11 +21,9 @@ def PRS_evaluate_multi(true_phenotypes, genotypes, gwas_betas):
     # gwas_betas = (snps, phenotypes) matrix of GWAS effect sizes for each snp (in same order as genotypes)
     ### goal: compute PRS scores for each trait and return R^2, variance of true phenotype explained
     PRS = genotypes @ gwas_betas
-    r2_values = []
+    corr_values = []
     for i in range(true_phenotypes.shape[1]):
-        ss_res = np.sum((true_phenotypes[:, i] - PRS[:, i]) ** 2)
-        ss_tot = np.sum((true_phenotypes[:, i] - np.mean(true_phenotypes[:, i])) ** 2)
-        r2 = 1 - (ss_res / ss_tot)
-        r2_values.append(r2)
-    return(r2)
+        pearsontest = pearsonr(true_phenotypes.iloc[:,i], PRS[:,i])
+        corr_values.append(pearsontest[0])
+    return(corr_values)
 

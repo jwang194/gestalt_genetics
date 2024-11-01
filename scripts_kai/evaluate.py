@@ -25,6 +25,7 @@ gg = np.loadtxt('configs/%s_gg.txt'%C)
 output = []
 
 for r in range(1,R+1):
+#for r in R:
     truth_dir = true_betas_path + '%s_%s_%s_rep%s_B.txt'%(N,M,C,r)
     if not os.path.isfile(truth_dir):
         print('replicate %i missing!'%r)
@@ -45,13 +46,13 @@ for r in range(1,R+1):
     running_output = []
     for i in range(nphen):
         base_shared_corr = pearsonr(estimates[i].iloc[:shared_m].BETA,estimates[i].iloc[:shared_m][i])[0]
-        maxh_shared_corr = pearsonr(maxh_estimates[4].iloc[:shared_m].BETA,truth.iloc[:shared_m][i])[0]
+        maxh_shared_corr = pearsonr(maxh_estimates[(nphen-1)].iloc[:shared_m].BETA,truth.iloc[:shared_m][i])[0]
         base_shared_powr = (estimates[i].iloc[:shared_m].P < 0.05/M).mean()
-        maxh_shared_powr = (maxh_estimates[4].iloc[:shared_m].P < 0.05/M).mean()
+        maxh_shared_powr = (maxh_estimates[(nphen-1)].iloc[:shared_m].P < 0.05/M).mean()
         base_specific_corr = pearsonr(estimates[i].iloc[(shared_m+i*specific_m):(shared_m+i*specific_m+specific_m)].BETA,estimates[i].iloc[(shared_m+i*specific_m):(shared_m+i*specific_m+specific_m)][i])[0] 
-        maxh_specific_corr = pearsonr(maxh_estimates[4].iloc[(shared_m+i*specific_m):(shared_m+i*specific_m+specific_m)].BETA,truth.iloc[(shared_m+i*specific_m):(shared_m+i*specific_m+specific_m)][i])[0]
+        maxh_specific_corr = pearsonr(maxh_estimates[(nphen-1)].iloc[(shared_m+i*specific_m):(shared_m+i*specific_m+specific_m)].BETA,truth.iloc[(shared_m+i*specific_m):(shared_m+i*specific_m+specific_m)][i])[0]
         base_specific_powr = (estimates[i].iloc[(shared_m+i*specific_m):(shared_m+i*specific_m+specific_m)].P < 0.05/M).mean() 
-        maxh_specific_powr = (maxh_estimates[4].iloc[(shared_m+i*specific_m):(shared_m+i*specific_m+specific_m)].P < 0.05/M).mean()
+        maxh_specific_powr = (maxh_estimates[(nphen-1)].iloc[(shared_m+i*specific_m):(shared_m+i*specific_m+specific_m)].P < 0.05/M).mean()
 
         running_output.append([base_shared_corr,'Base GWAS: Shared Effects','Correlation',gg[i,i]])
         running_output.append([base_specific_corr,'Base GWAS: Specific Effects','Correlation',gg[i,i]])

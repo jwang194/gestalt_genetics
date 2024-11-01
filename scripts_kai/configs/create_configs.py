@@ -24,6 +24,7 @@ print('Genetic covariance: ')
 print(genetic_covariance)
 np.savetxt(setting_name + '_gg.txt', genetic_covariance, fmt='%.12f')
 
+print(float(environmental_correlation))
 environmental_covariance = np.random.uniform( float(environmental_correlation), 0, size=(num_traits, num_traits))
 np.fill_diagonal(environmental_covariance, [ (1-x) for x in heritability_list] )
 print('Environmental covariance: ')
