@@ -1,7 +1,1 @@
-GENOTYPE_PREFIX="/u/home/k/kaia/GESTALT/data/sim/genotypes/N50kM100k/sim1" # Path to PLINK binary files without extension
-PHENOTYPE_FILE="/u/home/k/kaia/GESTALT/data/sim/phenos/N50kM10k_5traits_rg0.1_re-0.1/" # Path to true phenotype file (1000_10000_testing_rep1234_P.txt, 1000_10000_testing_rep1234_MG.txt)
-NUM_FOLDS=5 # Number of folds for cross-validation
-OUT_DIR="/u/home/k/kaia/GESTALT/data/sim/PRS/N50kM10k_5traits_rg0.1_re-0.1/" # Output directory
-setting=50000_10000_all_and_ind_overlaps_uniform_gg_random_ge_0.1_rep${rep}
-M=10000 # number of snps
-NUM_PHENOS=5
+Rscript collect_results.R /u/home/k/kaia/GESTALT/data/sim/PRS/N50kM10k_5traits_rg0.1_re-0.1/ /u/home/k/kaia/GESTALT/data/sim/phenos/N50kM10k_5traits_rg0.1_re-0.1/50000_10000_all_and_ind_overlaps_uniform_gg_random_ge_0.1_rep 5 P /u/home/k/kaia/GESTALT/data/sim/PRS/N50kM10k_5traits_rg0.1_re-0.1/results/

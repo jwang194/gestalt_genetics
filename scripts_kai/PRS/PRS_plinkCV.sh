@@ -2,12 +2,12 @@ source ~/.bashrc
 
 rep=$1
 GENOTYPE_PREFIX="/u/home/k/kaia/GESTALT/data/sim/genotypes/N50kM100k/sim1" # Path to PLINK binary files without extension
-PHENOTYPE_FILE="/u/home/k/kaia/GESTALT/data/sim/phenos/N50kM10k_5traits_rg0.1_re-0.1/" # Path to true phenotype file (1000_10000_testing_rep1234_P.txt, 1000_10000_testing_rep1234_MG.txt)
+PHENOTYPE_FILE="/u/home/k/kaia/GESTALT/data/sim/phenos/N50kM10k_10traits_rg0.05_re-0.1/" # Path to true phenotype file (1000_10000_testing_rep1234_P.txt, 1000_10000_testing_rep1234_MG.txt)
 NUM_FOLDS=5 # Number of folds for cross-validation
-OUT_DIR="/u/home/k/kaia/GESTALT/data/sim/PRS/N50kM10k_5traits_rg0.1_re-0.1/" # Output directory
-setting=50000_10000_all_and_ind_overlaps_uniform_gg_random_ge_0.1_rep${rep}
+OUT_DIR="/u/home/k/kaia/GESTALT/data/sim/PRS/N50kM10k_10traits_rg0.05_re-0.1/" # Output directory
+setting=50000_10000_traits_10_shared_0.2_specific_0.08_uniform_rg_0.05_random_re_-0.1_rep${rep}
 M=10000 # number of snps
-NUM_PHENOS=5
+NUM_PHENOS=10
 
 
 # Split the fam file into N random parts (testing fold for every iteration)
