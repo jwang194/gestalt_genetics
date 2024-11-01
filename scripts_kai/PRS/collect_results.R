@@ -37,7 +37,11 @@ for (thresh in p_threshholds){
             # --- compute R-squared between predicted and actual
             r_squares <- c()
             for (i in 3:(2 + Num_pheno)){
-                r_squares <- append(r_squares, summary(lm(df_Pheno[,i] ~ PRS_df[,i]))$r.squared )
+                if (sum(is.na(PRS_df[,i])) == 0){
+                    r_squares <- append(r_squares, summary(lm(df_Pheno[,i] ~ PRS_df[,i]))$r.squared )
+                }else{
+                    r_squares <- append(r_squares, NA )
+                }
             }
             # --- 
 
@@ -46,7 +50,8 @@ for (thresh in p_threshholds){
 
     }
 
-    write.table(na.omit(df_results), file = paste0(out_dir, "PRS_results_rsquared_threshold", thresh, "pheno_", Pheno_type, ".txt"), quote = F, col.names = T, row.names = F, sep = '\t')
+    df_results <- df_results[-1,]
+    write.table(df_results, file = paste0(out_dir, "PRS_results_rsquared_threshold", thresh, "pheno_", Pheno_type, ".txt"), quote = F, col.names = T, row.names = F, sep = '\t')
 
 }
 
