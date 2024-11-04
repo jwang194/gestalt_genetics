@@ -4,16 +4,18 @@ library(tidyr)
 library(dplyr)
 
 
-setting <- "C:/Users/kaiak/OneDrive/Documents/GESTALT/N50kM10k_10traits_rg0.05_reneg0.1/"
+#setting <- "C:/Users/kaiak/OneDrive/Documents/GESTALT/N50kM10k_10traits_rg0.05_reneg0.1/"
+setting <- "C:/Users/kaiak/OneDrive/Documents/GESTALT/N50kM10k_5traits_rg0.1_reneg0.1/"
 p_thresholds <- c('0.000005', '0.001', '0.05')
-num_pheno <- 10
-#heritabilities <- c(0.4, 0.3, 0.15, 0.5, 0.2, 'MaxH')
-heritabilities <- c(rep(0.1, times = num_pheno), 'MaxH')
+#num_pheno <- 10
+num_pheno <- 5
+heritabilities <- c(0.4, 0.3, 0.15, 0.5, 0.2, 'MaxH')
+#heritabilities <- c(rep(0.1, times = num_pheno), 'MaxH')
 
 # --- plot all p value settings separately
 for (p_current in p_thresholds){
   df_P <- fread(paste0(setting, "PRS_results_rsquared_threshold", p_current, "pheno_P.txt"))
-  df_MG <- fread(paste0(setting, "PRS_results_rsquared_threshold", p_current, "pheno_MG.txt"), select = c(num_pheno))
+  df_MG <- fread(paste0(setting, "PRS_results_rsquared_threshold", p_current, "pheno_MG.txt"))
   colnames(df_MG) <- "PRS_MaxH"
   df_merged <- data.frame(df_P, df_MG)
   long_df <- stack(df_merged[, 1:(num_pheno+1)])
@@ -31,12 +33,12 @@ for (p_current in p_thresholds){
 
 # --- plot best p value cutoff for each trait
 df_P <- fread(paste0(setting, "PRS_results_rsquared_threshold", '0.000005', "pheno_P.txt"))
-df_MG <- fread(paste0(setting, "PRS_results_rsquared_threshold", '0.000005', "pheno_MG.txt"), select = c(num_pheno))
+df_MG <- fread(paste0(setting, "PRS_results_rsquared_threshold", '0.000005', "pheno_MG.txt"))
 colnames(df_MG) <- "PRS_MaxH"
 df_best <- data.frame(df_P, df_MG)
 for (p_current in p_thresholds[2:length(p_thresholds)]){
   df_P <- fread(paste0(setting, "PRS_results_rsquared_threshold", p_current, "pheno_P.txt"))
-  df_MG <- fread(paste0(setting, "PRS_results_rsquared_threshold", p_current, "pheno_MG.txt"), select = c(num_pheno))
+  df_MG <- fread(paste0(setting, "PRS_results_rsquared_threshold", p_current, "pheno_MG.txt"))
   colnames(df_MG) <- "PRS_MaxH"
   df_merged <- data.frame(df_P, df_MG)
   for (i in 1:ncol(df_merged)){
