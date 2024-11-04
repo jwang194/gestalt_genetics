@@ -5,8 +5,14 @@ args <- commandArgs(trailingOnly = TRUE)
 PRS_file_dir <- args[1] # directory to PRS predictions ex. (/u/home/k/kaia/GESTALT/data/sim/PRS/N50kM10k_5traits_rg0.1_re-0.1/)
 Pheno_file_prefix <- args[2] # phenotype file dir + prefix ex. (/u/home/k/kaia/GESTALT/data/sim/phenos/N50kM10k_5traits_rg0.1_re-0.1/50000_10000_all_and_ind_overlaps_uniform_gg_random_ge_0.1_rep)
 Num_pheno <- as.numeric(args[3])
-Pheno_type <- args[4] # P or MG
+Pheno_type <- args[4] # P or MG or MG_sumPRS
 out_dir <- args[5]
+
+if (Pheno_type == "MG_sumPRS"){
+    Pheno_ref <- "MG" # define which phenotype the model tried to predict
+}else{
+    Pheno_ref <- Pheno_type
+}
 
 p_threshholds <- c('0.000005', '0.001', '0.05')
 R <- 25
@@ -23,8 +29,8 @@ for (thresh in p_threshholds){ # for each threshold
 
     for (r in 1:R){
 
-        if (file.exists(paste0(Pheno_file_prefix, r, "_", Pheno_type, ".txt"))){
-            df_Pheno <- as.data.frame(fread(paste0(Pheno_file_prefix, r, "_", Pheno_type, ".txt"))) # read phenotype file
+        if (file.exists(paste0(Pheno_file_prefix, r, "_", Pheno_ref, ".txt"))){
+            df_Pheno <- as.data.frame(fread(paste0(Pheno_file_prefix, r, "_", Pheno_ref, ".txt"))) # read phenotype file
 
             # --- collect PRS results across phenotypes (for this threshold/iteration pair)
             if (Pheno_type == 'P'){ # if P, collect PRS predictions for each phenotype
