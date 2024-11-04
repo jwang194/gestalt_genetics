@@ -1,10 +1,13 @@
+# Evaluate linear combination of PRS to predict maxH phenotype
+# Need to split the training fold to train GWAS effect sizes and PRS mixing weights
+
 source ~/.bashrc
 
 rep=$1
 GENOTYPE_PREFIX="/u/home/k/kaia/GESTALT/data/sim/genotypes/N50kM100k/sim1" # Path to PLINK binary files without extension
 PHENOTYPE_FILE="/u/home/k/kaia/GESTALT/data/sim/phenos/N50kM10k_5traits_rg0.1_re-0.1/" # Path to true phenotype file
 NUM_FOLDS=5 # Number of folds for cross-validation
-OUT_DIR="/u/home/k/kaia/GESTALT/data/sim/PRS/N50kM10k_5traits_rg0.1_re-0.1/" # Output directory
+OUT_DIR="/u/home/k/kaia/GESTALT/data/sim/PRS/N50kM10k_5traits_rg0.1_re-0.1_SUM/" # Output directory
 setting=50000_10000_all_and_ind_overlaps_uniform_gg_random_ge_0.1_rep${rep} # basically prefix of the phenotype files
 M=10000 # Number of snps
 NUM_PHENOS=5 # Number of phenotypes
@@ -33,6 +36,7 @@ for thresh in "${thresholds[@]}"; do
         echo -e "FID\tIID\tPRS" > ${OUT_DIR}prs_predictions_pheno${pheno}_thresh${thresh}rep${rep}_P.txt
     done
     echo -e "FID\tIID\tPRS" > ${OUT_DIR}prs_predictions_thresh${thresh}rep${rep}_MG.txt
+    echo -e "FID\tIID\tPRS" > ${OUT_DIR}prs_predictions_thresh${thresh}rep${rep}_MG_sumPRS.txt
 done
 
 # Loop through each fold
@@ -62,6 +66,9 @@ for test_fold in $(seq 1 $NUM_FOLDS); do
     # Filter phenotype file to keep only training individuals
     python3 filter_phenotype.py ${PHENOTYPE_FILE}${setting} $GENOTYPE_TRAIN
 
+    # --- Call another script here to compute sum of PRS weights
+    bash SumOfPRS.sh $GENOTYPE_TRAIN $GENOTYPE_PREFIX $NUM_PHENOS "${thresholds[@]}"
+
     # --- GWAS on training individuals (NOTE: At this point, SNPs are already subset to the set used to simulate phenotype)
     plink2 \
     --bfile $GENOTYPE_TRAIN \
@@ -87,11 +94,11 @@ for test_fold in $(seq 1 $NUM_FOLDS); do
             --bfile ${GENOTYPE_TEST} \
             --score ${GENOTYPE_TRAIN}'_P.PHEN'${pheno}'.glm.linear' 3 4 12 header \
             --q-score-range range_list ${GENOTYPE_TRAIN}_P_SNP.pvalue.PHEN${pheno} \
-            --out ${GENOTYPE_TEST}'_P'_PHEN${pheno} \
+            --out ${GENOTYPE_TEST}'_P_PHEN'${pheno} \
             --threads ${NUM_THREADS}
         # Append PRS results for current fold to the final files
         for thresh in "${thresholds[@]}"; do
-            awk 'BEGIN {OFS="\t"} NR>1 {print $1, $2, $6}' ${GENOTYPE_TEST}'_P'_PHEN${pheno}.${thresh}.sscore >> ${OUT_DIR}prs_predictions_pheno${pheno}_thresh${thresh}rep${rep}_P.txt
+            awk 'BEGIN {OFS="\t"} NR>1 {print $1, $2, $6}' ${GENOTYPE_TEST}'_P_PHEN'${pheno}.${thresh}.sscore >> ${OUT_DIR}prs_predictions_pheno${pheno}_thresh${thresh}rep${rep}_P.txt
         done
     done
 
@@ -101,11 +108,21 @@ for test_fold in $(seq 1 $NUM_FOLDS); do
         --bfile ${GENOTYPE_TEST} \
         --score ${GENOTYPE_TRAIN}'_MG.PHEN'${NUM_PHENOS}'.glm.linear' 3 4 12 header \
         --q-score-range range_list ${GENOTYPE_TRAIN}_MG_SNP.pvalue.PHEN${NUM_PHENOS} \
-        --out ${GENOTYPE_TEST}'_MG'_PHEN${NUM_PHENOS} \
+        --out ${GENOTYPE_TEST}'_MG_PHEN'${NUM_PHENOS} \
         --threads ${NUM_THREADS}
     # Append PRS results for current fold to the final files
     for thresh in "${thresholds[@]}"; do
-        awk 'BEGIN {OFS="\t"} NR>1 {print $1, $2, $6}' ${GENOTYPE_TEST}'_MG'_PHEN${NUM_PHENOS}.${thresh}.sscore >> ${OUT_DIR}prs_predictions_thresh${thresh}rep${rep}_MG.txt
+        awk 'BEGIN {OFS="\t"} NR>1 {print $1, $2, $6}' ${GENOTYPE_TEST}'_MG_PHEN'${NUM_PHENOS}.${thresh}.sscore >> ${OUT_DIR}prs_predictions_thresh${thresh}rep${rep}_MG.txt
+    done
+
+    # use SUM PRS betas to predict on training cohort 
+    for thresh in "${thresholds[@]}"; do
+        plink2 \
+            --bfile ${GENOTYPE_TEST} \
+            --score ${GENOTYPE_TRAIN}_thresh_${thresh}_SUM_PRS_BETAS.txt 1 2 3 header \
+            --out ${GENOTYPE_TEST}'_SUM_PRS_MG_PHEN'${NUM_PHENOS} \
+            --threads ${NUM_THREADS}
+        awk 'BEGIN {OFS="\t"} NR>1 {print $1, $2, $6}' ${GENOTYPE_TEST}'_SUM_PRS_MG_PHEN'${NUM_PHENOS}.sscore >> ${OUT_DIR}prs_predictions_thresh${thresh}rep${rep}_MG_sumPRS.txt
     done
 
     # remove intermediate files from this fold
