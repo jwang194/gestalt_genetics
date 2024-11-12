@@ -5,12 +5,14 @@ args <- commandArgs(trailingOnly = TRUE)
 PRS_file_dir <- args[1] # directory to PRS predictions ex. (/u/home/k/kaia/GESTALT/data/sim/PRS/N50kM10k_5traits_rg0.1_re-0.1/)
 Pheno_file_prefix <- args[2] # phenotype file dir + prefix ex. (/u/home/k/kaia/GESTALT/data/sim/phenos/N50kM10k_5traits_rg0.1_re-0.1/50000_10000_all_and_ind_overlaps_uniform_gg_random_ge_0.1_rep)
 Num_pheno <- as.numeric(args[3])
-Pheno_type <- args[4] # P or MG or MG_sumPRS
+Pheno_type <- args[4] # P or MG or MG_sumPRS or SUM_sumPRS
 out_dir <- args[5]
 
 if (Pheno_type == "MG_sumPRS"){
     Pheno_ref <- "MG" # define which phenotype the model tried to predict
-}else{
+} else if (Pheno_type == "SUM_sumPRS") {
+    Pheno_ref <- "SUM"
+} else{
     Pheno_ref <- Pheno_type
 }
 
@@ -24,7 +26,7 @@ for (thresh in p_threshholds){ # for each threshold
         colnames(df_results) <- paste0("PRS_", 1:Num_pheno)
     }else{
         df_results <- data.frame(matrix(ncol = 1, nrow = 1)) # will append to this dataframe
-        colnames(df_results) <- "PRS_maxh"
+        colnames(df_results) <- "PRS"
     }
 
     for (r in 1:R){
@@ -42,9 +44,9 @@ for (thresh in p_threshholds){ # for each threshold
                     colnames(df_prs)[3] <- paste0("PRS_", pheno)
                     PRS_df <- merge(PRS_df, df_prs, by = c('FID', 'IID'))
                 }
-            }else{ # if MG, just collect the PRS prediction for most heritable phenotype 
+            }else{ # if MG or MG_sumPRS or SUM_sumPRS, just collect the PRS prediction for most heritable phenotype 
                 PRS_df <- fread(paste0(PRS_file_dir, "prs_predictions_thresh", thresh, "rep", r, "_", Pheno_type, ".txt"))
-                colnames(PRS_df)[3] <- "PRS_maxh"
+                colnames(PRS_df)[3] <- "PRS"
             }
             PRS_df <- as.data.frame(PRS_df[match(df_Pheno$IID, PRS_df$IID), ])
             # ---
@@ -59,7 +61,13 @@ for (thresh in p_threshholds){ # for each threshold
                         r_squares <- append(r_squares, NA )
                     }
                 }
-            }else{ # if MG, compute R-squared between predicted and actual for maxh phenotype
+            } else if (Pheno_type == 'SUM_sumPRS') { # if SUM_sumPRS compute R-squared between predicted and actual SUM
+                if (sum(is.na(PRS_df[,3])) == 0){
+                    r_squares <- append(r_squares, summary(lm(df_Pheno[,3] ~ PRS_df[,3]))$r.squared )
+                }else{
+                    r_squares <- append(r_squares, NA )
+                }
+            } else{ # if MG or MG_sumPRS, compute R-squared between predicted and actual for maxh phenotype
                 if (sum(is.na(PRS_df[,3])) == 0){
                     r_squares <- append(r_squares, summary(lm(df_Pheno[,(2 + Num_pheno)] ~ PRS_df[,3]))$r.squared )
                 }else{

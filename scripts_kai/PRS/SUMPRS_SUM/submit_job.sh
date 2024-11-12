@@ -8,9 +8,12 @@
 . /u/local/Modules/default/init/modules.sh
 module load mamba
 mamba activate gestalt
-cd /u/home/k/kaia/GESTALT/gestalt_genetics/scripts_kai/PRS/
+cd /u/home/k/kaia/GESTALT/gestalt_genetics/scripts_kai/PRS/SUMPRS_SUM/
 
 # iterate through simulation replicates
 for i in {1..25}; do
-    bash PRS_plinkCV.sh $i
+    bash PRS_sum_plinkCV.sh $i
+done
+for i in {1..25}; do
+    bash PRS_sum_plinkCV2.sh $i
 done

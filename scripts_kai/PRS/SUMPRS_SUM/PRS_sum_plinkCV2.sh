@@ -13,6 +13,9 @@ M=10000 # Number of snps
 NUM_PHENOS=10 # Number of phenotypes
 NUM_THREADS=$(nproc)
 
+# Create sum of traits file - target for sum of PRS 
+python3 sumPhenos.py ${PHENOTYPE_FILE}${setting}
+
 # Split the fam file into N random parts (testing fold for every iteration)
 mkdir ${OUT_DIR}
 mkdir ${OUT_DIR}cv
@@ -25,6 +28,7 @@ done
 
 # P-value thresholds for PRS scores (NOTE: in simulations all snps are independent so no LD pruning)
 thresholds=(0.000005 0.001 0.05) # Add p-value thresholds here if wanted 
+#thresholds=(0.001)
 > range_list
 for thresh in "${thresholds[@]}"; do
     echo "$thresh 0 $thresh" >> range_list # input for plink later
@@ -36,7 +40,6 @@ for thresh in "${thresholds[@]}"; do
         echo -e "FID\tIID\tPRS" > ${OUT_DIR}prs_predictions_pheno${pheno}_thresh${thresh}rep${rep}_P.txt
     done
     echo -e "FID\tIID\tPRS" > ${OUT_DIR}prs_predictions_thresh${thresh}rep${rep}_MG.txt
-    echo -e "FID\tIID\tPRS" > ${OUT_DIR}prs_predictions_thresh${thresh}rep${rep}_MG_sumPRS.txt
 done
 
 # Loop through each fold
@@ -64,10 +67,7 @@ for test_fold in $(seq 1 $NUM_FOLDS); do
     --threads ${NUM_THREADS}
 
     # Filter phenotype file to keep only training individuals
-    python3 filter_phenotype.py ${PHENOTYPE_FILE}${setting} $GENOTYPE_TRAIN
-
-    # --- Call another script here to compute sum of PRS weights
-    bash SumOfPRS.sh $GENOTYPE_TRAIN $GENOTYPE_PREFIX $NUM_PHENOS "${thresholds[@]}"
+    python3 ../filter_phenotype.py ${PHENOTYPE_FILE}${setting} $GENOTYPE_TRAIN
 
     # --- GWAS on training individuals (NOTE: At this point, SNPs are already subset to the set used to simulate phenotype)
     plink2 \
@@ -115,17 +115,14 @@ for test_fold in $(seq 1 $NUM_FOLDS); do
         awk 'BEGIN {OFS="\t"} NR>1 {print $1, $2, $6}' ${GENOTYPE_TEST}'_MG_PHEN'${NUM_PHENOS}.${thresh}.sscore >> ${OUT_DIR}prs_predictions_thresh${thresh}rep${rep}_MG.txt
     done
 
-    # use SUM PRS betas to predict on training cohort 
-    for thresh in "${thresholds[@]}"; do
-        plink2 \
-            --bfile ${GENOTYPE_TEST} \
-            --score ${GENOTYPE_TRAIN}_thresh_${thresh}_SUM_PRS_BETAS.txt 1 2 3 header \
-            --out ${GENOTYPE_TEST}'_SUM_PRS_MG_PHEN'${NUM_PHENOS} \
-            --threads ${NUM_THREADS}
-        awk 'BEGIN {OFS="\t"} NR>1 {print $1, $2, $6}' ${GENOTYPE_TEST}'_SUM_PRS_MG_PHEN'${NUM_PHENOS}.sscore >> ${OUT_DIR}prs_predictions_thresh${thresh}rep${rep}_MG_sumPRS.txt
-    done
-
     # remove intermediate files from this fold
-    rm ${GENOTYPE_TRAIN}*
-    rm ${GENOTYPE_TEST}*
+    rm -rf ${GENOTYPE_TRAIN}*
+    rm -rf ${GENOTYPE_TEST}*
 done
+
+# sum the PRS scores of each phenotype to create sum of PRS, creates _SUM_sumPRS.txt
+for thresh in "${thresholds[@]}"; do
+        python3 sumPRS.py ${OUT_DIR} $NUM_PHENOS $thresh $rep
+done
+
+

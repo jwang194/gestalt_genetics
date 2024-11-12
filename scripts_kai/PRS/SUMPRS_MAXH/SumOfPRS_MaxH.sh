@@ -11,6 +11,7 @@ mkdir ${CV_SUM_dir}
 CV_SUM_TRAIN=${CV_SUM_dir}/traintrain # prefix for training fold of training fold = used to train Betas 
 CV_SUM_TEST=${CV_SUM_dir}/traintest # prefix for testing fold of training fold = used to train mixing weights across PRS
 
+# define number of individuals in the train-train split and train-test split
 NUM_TRAINING_FIFTH=$(( $(wc -l < ${TRAINING_PATH}.fam) / 5 ))
 head -n $NUM_TRAINING_FIFTH ${TRAINING_PATH}.fam > ${CV_SUM_TEST}.IDS # fifth of the training fold
 
@@ -36,7 +37,7 @@ plink2 \
      --threads ${NUM_THREADS}
 
 # Filter phenotypes to traintrain fold
-python3 filter_phenotype.py $TRAINING_PATH $CV_SUM_TRAIN
+python3 ../filter_phenotype.py $TRAINING_PATH $CV_SUM_TRAIN
 
 # GWAS on traintrain fold 
 plink2 \
@@ -56,11 +57,12 @@ for pheno in $(seq 1 $NUM_PHENOS); do
         --q-score-range range_list ${CV_SUM_TRAIN}_P_SNP.pvalue.PHEN${pheno} \
         --out ${CV_SUM_TEST}'_P_PHEN'${pheno} \
         --threads ${NUM_THREADS}
-    # Append PRS results for current fold to the final files
+    # Append PRS results for current fold
     for thresh in "${thresholds[@]}"; do
         awk 'BEGIN {OFS="\t"} NR>1 {print $1, $2, $6}' ${CV_SUM_TEST}'_P'_PHEN${pheno}.${thresh}.sscore >> ${CV_SUM_TEST}_prs_predictions_pheno${pheno}_thresh${thresh}_P.txt
     done
 done
 
+# compute a linear combination of PRS to predict maxh phenotype
 python3 PRS_sum_fit.py $TRAINING_PATH ${CV_SUM_TEST}_prs_predictions_pheno ${CV_SUM_TEST}.fam ${CV_SUM_TRAIN}'_P' $NUM_PHENOS
 

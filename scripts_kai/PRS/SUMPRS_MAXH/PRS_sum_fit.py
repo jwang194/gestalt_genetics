@@ -49,6 +49,5 @@ for p in p_thresholds:
     BETAS_COMBINED = GWAS_betas_df.iloc[:,1:] @ coeffs
     GWAS_betas_df = pd.read_csv(f"{gwas_prefix}.PHEN1.glm.linear", sep='\t').iloc[:,[2,3,11]]
     GWAS_betas_df['BETA'] = BETAS_COMBINED
-    phenotype_files
     # save Betas (these the SNP weights for MaxH phenotype, at a specific p-value threshold)
     GWAS_betas_df.to_csv(phenotype_files + '_thresh_' + p + '_SUM_PRS_BETAS.txt',sep='\t',index=False)
