@@ -5,12 +5,12 @@ source ~/.bashrc
 
 rep=$1
 GENOTYPE_PREFIX="/u/home/k/kaia/GESTALT/data/sim/genotypes/N50kM100k/sim1" # Path to PLINK binary files without extension
-PHENOTYPE_FILE="/u/home/k/kaia/GESTALT/data/sim/phenos/N50kM10k_5traits_rg0.1_re-0.1/" # Path to true phenotype file
+PHENOTYPE_FILE="/u/home/k/kaia/GESTALT/data/sim/phenos/N50kM10k_10traits_rg0.01_re-0.1/" # Path to true phenotype file
 NUM_FOLDS=5 # Number of folds for cross-validation
-OUT_DIR="/u/home/k/kaia/GESTALT/data/sim/PRS/N50kM10k_5traits_rg0.1_re-0.1_SUM/" # Output directory
-setting=50000_10000_all_and_ind_overlaps_uniform_gg_random_ge_0.1_rep${rep} # basically prefix of the phenotype files
+OUT_DIR="/u/home/k/kaia/GESTALT/data/sim/PRS/N50kM10k_10traits_rg0.01_re-0.1_SUM/" # Output directory
+setting=50000_10000_traits_10_shared_0.2_specific_0.08_uniform_rg_0.01_random_re_-0.1_rep${rep} # basically prefix of the phenotype files
 M=10000 # Number of snps
-NUM_PHENOS=5 # Number of phenotypes
+NUM_PHENOS=10 # Number of phenotypes
 NUM_THREADS=$(nproc)
 
 

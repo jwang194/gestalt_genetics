@@ -95,7 +95,7 @@ for test_fold in $(seq 1 $NUM_FOLDS); do
         done
     done
 
-    # plink command to build PRS for MaxH phenotype, only for last phenotype with is the max heritable component (first PC)
+    # plink command to build PRS for MaxH phenotype, only for last phenotype which is the max heritable component (first PC)
     awk 'BEGIN { OFS="\t" } {print $3,$15}' ${GENOTYPE_TRAIN}'_MG.PHEN'${NUM_PHENOS}'.glm.linear' > ${GENOTYPE_TRAIN}_MG_SNP.pvalue.PHEN${NUM_PHENOS} # Create a file with SNP ID and p values
     plink2 \
         --bfile ${GENOTYPE_TEST} \

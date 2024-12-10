@@ -1,0 +1,10 @@
+label	symptom	hsq_Huang_2024_Biological_Psychiatry	hsq_Thorp_2019_Psychological_Medicine
+A1	Depressed mood	0.1	0.081
+A2	Anhedonia	0.11	0.067
+A3	Appetite changes	0.12	0.068
+A4	Sleep problems	0.08	0.079
+A5	Psychomotor changes	0.08	0.091
+A6	Fatigue	0.1	0.063
+A7	Low self-esteem	0.09	0.060
+A8	Concentration problems	0.09	0.066
+A9	Suicidal ideation	0.12	0.068

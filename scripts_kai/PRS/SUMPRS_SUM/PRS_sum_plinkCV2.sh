@@ -5,10 +5,10 @@ source ~/.bashrc
 
 rep=$1
 GENOTYPE_PREFIX="/u/home/k/kaia/GESTALT/data/sim/genotypes/N50kM100k/sim1" # Path to PLINK binary files without extension
-PHENOTYPE_FILE="/u/home/k/kaia/GESTALT/data/sim/phenos/N50kM10k_10traits_rg0.05_re-0.1/" # Path to true phenotype file
+PHENOTYPE_FILE="/u/home/k/kaia/GESTALT/data/sim/phenos/N50kM10k_10traits_rg0.005_re-0.1/" # Path to true phenotype file
 NUM_FOLDS=5 # Number of folds for cross-validation
-OUT_DIR="/u/home/k/kaia/GESTALT/data/sim/PRS/N50kM10k_10traits_rg0.05_re-0.1_SUM/" # Output directory
-setting=50000_10000_traits_10_shared_0.2_specific_0.08_uniform_rg_0.05_random_re_-0.1_rep${rep} # basically prefix of the phenotype files
+OUT_DIR="/u/home/k/kaia/GESTALT/data/sim/PRS/N50kM10k_10traits_rg0.005_re-0.1_SUM/" # Output directory
+setting=50000_10000_traits_10_shared_0.2_specific_0.08_uniform_rg_0.005_random_re_-0.1_rep${rep} # basically prefix of the phenotype files
 M=10000 # Number of snps
 NUM_PHENOS=10 # Number of phenotypes
 NUM_THREADS=$(nproc)
@@ -102,7 +102,7 @@ for test_fold in $(seq 1 $NUM_FOLDS); do
         done
     done
 
-    # plink command to build PRS for MaxH phenotype, only for last phenotype with is the max heritable component (first PC)
+    # plink command to build PRS for MaxH phenotype, only for last phenotype which is the max heritable component (first PC)
     awk 'BEGIN { OFS="\t" } {print $3,$15}' ${GENOTYPE_TRAIN}'_MG.PHEN'${NUM_PHENOS}'.glm.linear' > ${GENOTYPE_TRAIN}_MG_SNP.pvalue.PHEN${NUM_PHENOS} # Create a file with SNP ID and p values
     plink2 \
         --bfile ${GENOTYPE_TEST} \
