@@ -5,12 +5,12 @@ args <- commandArgs(trailingOnly = TRUE)
 PRS_file_dir <- args[1] # directory to PRS predictions ex. (/u/home/k/kaia/GESTALT/data/sim/PRS/N50kM10k_5traits_rg0.1_re-0.1/)
 Pheno_file_prefix <- args[2] # phenotype file dir + prefix ex. (/u/home/k/kaia/GESTALT/data/sim/phenos/N50kM10k_5traits_rg0.1_re-0.1/50000_10000_all_and_ind_overlaps_uniform_gg_random_ge_0.1_rep)
 Num_pheno <- as.numeric(args[3])
-Pheno_type <- args[4] # P or MG or MG_sumPRS or SUM_sumPRS
+Pheno_type <- args[4] # P or MG or MG_sumPRS or SUM_sumPRS or PRS_SUM
 out_dir <- args[5]
 
-if (Pheno_type == "MG_sumPRS"){
+if (Pheno_type == "MG_sumPRS" | Pheno_type == "MG"){
     Pheno_ref <- "MG" # define which phenotype the model tried to predict
-} else if (Pheno_type == "SUM_sumPRS") {
+} else if (Pheno_type == "SUM_sumPRS" | Pheno_type == "PRS_SUM") {
     Pheno_ref <- "SUM"
 } else{
     Pheno_ref <- Pheno_type
@@ -61,7 +61,7 @@ for (thresh in p_threshholds){ # for each threshold
                         r_squares <- append(r_squares, NA )
                     }
                 }
-            } else if (Pheno_type == 'SUM_sumPRS') { # if SUM_sumPRS compute R-squared between predicted and actual SUM
+            } else if (Pheno_type == 'SUM_sumPRS' | Pheno_type == "PRS_SUM") { # if SUM_sumPRS or PRS_SUM compute R-squared between predicted and actual SUM
                 if (sum(is.na(PRS_df[,3])) == 0){
                     r_squares <- append(r_squares, summary(lm(df_Pheno[,3] ~ PRS_df[,3]))$r.squared )
                 }else{
