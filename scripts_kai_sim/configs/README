@@ -1,0 +1,7 @@
+create_configs.py 
+    creates configuration files for given parameter settings 
+
+Note: simulation settings will grid search through various parameter settings 
+    polygenicity 
+	proportion of shared causal variants 
+	genetic covariance between traits 
