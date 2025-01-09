@@ -1,0 +1,37 @@
+Phenotype 1	Phenotype 2	rg	se	z	p	CI (95) lower	CI (95) upper
+Anhedonia	Appetite changes	0.801	0.047	1.72E+01	5.55E-66	0.70888	0.89312
+Anhedonia	Concentration problems	0.897	0.059	1.52E+01	5.31E-52	0.78136	1.01264
+Anhedonia	Depressed mood	0.9443	0.026	3.57E+01	1.10E-279	0.89334	0.99526
+Anhedonia	Fatigue	0.8237	0.041	2.03E+01	6.70E-92	0.74334	0.90406
+Anhedonia	Low self-esteem	0.7477	0.051	1.47E+01	8.96E-49	0.64774	0.84766
+Anhedonia	Psychomotor changes	0.9164	0.101	9.08E+00	1.14E-19	0.71844	1.11436
+Anhedonia	Sleep problems	0.696	0.051	1.36E+01	2.67E-42	0.59604	0.79596
+Anhedonia	Suicidal ideation	0.8486	0.094	9.04E+00	1.61E-19	0.66436	1.03284
+Appetite changes	Concentration problems	0.7557	0.059	12.772	2.34E-37	0.64006	0.87134
+Appetite changes	Depressed mood	0.7394	0.064	11.542	8.06E-31	0.61396	0.86484
+Appetite changes	Fatigue	0.7688	0.042	18.377	2.02E-75	0.68648	0.85112
+Appetite changes	Low self-esteem	0.6606	0.054	12.127	7.62E-34	0.55476	0.76644
+Appetite changes	Psychomotor changes	0.8039	0.095	8.475	2.36E-17	0.6177	0.9901
+Appetite changes	Sleep problems	0.6762	0.053	12.689	6.83E-37	0.57232	0.78008
+Appetite changes	Suicidal ideation	0.7955	0.101	7.9	2.78E-15	0.59754	0.99346
+Concentration problems	Depressed mood	0.7604	0.058	13.117	2.63E-39	0.64672	0.87408
+Concentration problems	Fatigue	0.7998	0.055	14.469	1.91E-47	0.692	0.9076
+Concentration problems	Low self-esteem	0.7741	0.072	10.776	4.45E-27	0.63298	0.91522
+Concentration problems	Psychomotor changes	0.9607	0.105	9.119	7.59E-20	0.7549	1.1665
+Concentration problems	Sleep problems	0.7212	0.059	12.189	3.54E-34	0.60556	0.83684
+Concentration problems	Suicidal ideation	0.7788	0.109	7.138	9.46E-13	0.56516	0.99244
+Depressed mood	Fatigue	0.8428	0.045	18.735	2.57E-78	0.7546	0.931
+Depressed mood	Low self-esteem	0.8596	0.047	18.114	2.45E-73	0.76748	0.95172
+Depressed mood	Psychomotor changes	0.8013	0.104	7.682	1.57E-14	0.59746	1.00514
+Depressed mood	Sleep problems	0.6868	0.056	12.232	2.09E-34	0.57704	0.79656
+Depressed mood	Suicidal ideation	0.8743	0.097	9.042	1.54E-19	0.68418	1.06442
+Fatigue	Low self-esteem	0.6174	0.057	10.897	1.20E-27	0.50568	0.72912
+Fatigue	Psychomotor changes	0.7993	0.095	8.457	2.75E-17	0.6131	0.9855
+Fatigue	Sleep problems	0.7616	0.043	17.584	3.25E-69	0.67732	0.84588
+Fatigue	Suicidal ideation	0.7536	0.105	7.184	6.78E-13	0.5478	0.9594
+Low self-esteem	Psychomotor changes	0.6739	0.108	6.216	5.12E-10	0.46222	0.88558
+Low self-esteem	Sleep problems	0.635	0.059	10.828	2.53E-27	0.51936	0.75064
+Low self-esteem	Suicidal ideation	0.7931	0.099	7.996	1.28E-15	0.59906	0.98714
+Psychomotor changes	Sleep problems	0.7	0.104	6.74	1.58E-11	0.49616	0.90384
+Psychomotor changes	Suicidal ideation	0.5448	0.149	3.665	2.48E-04	0.25276	0.83684
+Sleep problems	Suicidal ideation	0.5834	0.111	5.273	1.34E-07	0.36584	0.80096

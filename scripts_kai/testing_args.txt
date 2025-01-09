@@ -1,1 +1,0 @@
-bash pipeline_kai.sh 1000 10000 /u/home/k/kaia/GESTALT/data/sim/genotypes/N1kM10k/sim_N1000_M10000 testing ../../data/sim/phenos/ ../../data/sim/gwas/
