@@ -1,0 +1,1 @@
+Rscript collect_results.R /u/home/k/kaia/GESTALT/data/sim/PRS/N50kM10k_5traits_rg0.1_re-0.1/ /u/home/k/kaia/GESTALT/data/sim/phenos/N50kM10k_5traits_rg0.1_re-0.1/50000_10000_all_and_ind_overlaps_uniform_gg_random_ge_0.1_rep 5 P /u/home/k/kaia/GESTALT/data/sim/PRS/N50kM10k_5traits_rg0.1_re-0.1/results/
